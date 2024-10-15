@@ -1,11 +1,12 @@
 ﻿@using System.Drawing
 @typeparam T
 
+
 <div class="header-container">
     <h2 class="header-text">@Title</h2>
     @if (ErrorMessage != null)
     {
-        <GenericErrorMessage Message="@ErrorMessage"></GenericErrorMessage>
+        <ErrorMessage Message="@ErrorMessage"></ErrorMessage>
     }
     @if (SearchFilter != null)
     {
@@ -13,8 +14,8 @@
             <div class="icon-container">
                 <span class="material-symbols-outlined">search</span>
             </div>
-            <input type="text" placeholder="Search..." value="@SearchTerm" @oninput="@((search) => FilteredItems = 
-                                                                     Items.Where(x => SearchFilter((x, search.Value!.ToString()!))).ToList())" class="search-bar"/>
+            <input type="text" placeholder="Search..." value="@SearchTerm" @oninput="@((search) => FilteredItems =
+                                                                     Items.Where(x => SearchFilter((x, search.Value!.ToString()!))).ToList())" class="search-bar" />
         </div>
     }
     @if (OnAdd != null)
@@ -26,14 +27,15 @@
     }
 </div>
 
+
 <table>
     <thead>
-    <tr>
-        @foreach (var column in Columns)
-        {
-            <th>@column.Title</th>
-        }
-    </tr>
+        <tr>
+            @foreach (var column in Columns)
+            {
+                <th>@column.Title</th>
+            }
+        </tr>
     </thead>
     <tbody>
         @foreach (var item in FilteredItems)
@@ -48,7 +50,7 @@
                             break;
                         case ButtonColumn<T> buttonColumn:
                             <td @onclick:stopPropagation="true" @onclick:preventDefault="true">
-                                <button style="background-color: @(ColorTranslator.ToHtml(buttonColumn.Color(item)))" class="button" 
+                                <button style="background-color: @(ColorTranslator.ToHtml(buttonColumn.Color(item)))" class="button"
                                         @onclick="@(async () => await buttonColumn.Function(item))">
                                     @(buttonColumn.ButtonName != null ? buttonColumn.ButtonName(item) : buttonColumn.Title)
                                 </button>

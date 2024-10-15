@@ -1,0 +1,146 @@
+﻿@using Microsoft.AspNetCore.Components.Authorization
+<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <span class="fas fa-bars Hidebar" style="color:white;" aria-hidden="true" @onclick="ToggleIconMenu"></span>
+        @if (!@IconMenuActive)
+        {
+            <a class="navbar-brand" href="">DigiDate</a>
+        }
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</div>
+
+<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        <AuthorizeView Roles="Customer">
+
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/usermatching" Match="NavLinkMatch.All">
+                    <span class="fas fa-heart" aria-hidden="true"></span>
+                    @if (!@IconMenuActive)
+                    {
+                        <label>Swiping</label>
+                    }
+                </NavLink>
+            </div>
+        </AuthorizeView>
+        <AuthorizeView Roles="Admin">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/users" Match="NavLinkMatch.All">
+                    <span class="fas fa-user-shield" aria-hidden="true"></span>
+                    @if (!@IconMenuActive)
+                    {
+                        <label>User Management</label>
+                    }
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/admins" Match="NavLinkMatch.All">
+                    <span class="fas fa-user-shield" aria-hidden="true"></span>
+                    @if (!@IconMenuActive)
+                    {
+                        <label>Admin management</label>
+                    }
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/tags" Match="NavLinkMatch.All">
+                    <span class="fas fa-tags" aria-hidden="true"></span>
+                    @if (!@IconMenuActive)
+                    {
+                        <label>Tags Management</label>
+                    }
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/audits" Match="NavLinkMatch.All">
+                    <span class="fas fa-solid fa-table" aria-hidden="true"></span>
+                    @if (!@IconMenuActive)
+                    {
+                        <label>Audits</label>
+                    }
+                </NavLink>
+            </div>
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/tickets" Match="NavLinkMatch.All">
+                    <span class="fas fa-solid fa-ticket" aria-hidden="true"></span>
+                    @if (!@IconMenuActive)
+                    {
+                        <label>Tickets</label>
+                    }
+                </NavLink>
+            </div>
+        </AuthorizeView>
+    </nav>
+</div>
+
+<div class="bottom-row">
+    <nav class="flex-column">
+        <AuthorizeView Roles="Customer">
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/userpage" Match="NavLinkMatch.All">
+                    <span class="fas fa-user" aria-hidden="true"></span>
+                    @if (!@IconMenuActive)
+                    {
+                        <label class="login-lebel">Account</label>
+                    }
+                </NavLink>
+            </div>
+        </AuthorizeView>
+
+        <AuthorizeView>
+            <NotAuthorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="login">
+                        <span class="fas fa-user" aria-hidden="true"></span>
+                        @if (!@IconMenuActive)
+                        {
+                            <label class="login-lebel">Login</label>
+                        }
+                    </NavLink>
+                </div>
+            </NotAuthorized>
+            <Authorized>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="logout">
+                        <span class="fas fa-sign-out-alt" aria-hidden="true"></span>
+                        @if (!@IconMenuActive)
+                        {
+                            <label class="login-lebel">logout</label>
+                        }
+                    </NavLink>
+                </div>
+            </Authorized>
+
+        </AuthorizeView>
+    </nav>
+</div>
+
+@code {
+    [CascadingParameter] public Task<AuthenticationState> AuthState { get; set; } = default!;
+    [Parameter] public RenderFragment ChildContent { get; set; } = default!;
+    //bool to send to MainLayout for shrinking sidebar and showing/hide menu text
+    private bool IconMenuActive { get; set; } = false;
+
+    //EventCallback for sending bool to MainLayout
+    [Parameter]
+    public EventCallback<bool> ShowIconMenu { get; set; }
+
+    private bool collapseNavMenu = true;
+
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    //Method to toggle IconMenuActive bool and send bool via EventCallback
+    private async Task ToggleIconMenu()
+    {
+        IconMenuActive = !IconMenuActive;
+        await ShowIconMenu.InvokeAsync(IconMenuActive);
+    }
+}

@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Components;
-using System.Drawing;
+﻿using System.Drawing;
+using Microsoft.AspNetCore.Components;
 
-namespace ProjectName.Components.Generics;
+namespace ProjectName.Components.Shared;
 
 public partial class GenericTable<T> : ComponentBase
 {
