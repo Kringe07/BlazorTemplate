@@ -1,0 +1,148 @@
+﻿table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 1rem;
+    text-align: left;
+}
+
+thead th {
+    background-color: #333;
+    color: #fff;
+    padding: 12px;
+    text-transform: uppercase;
+}
+
+tbody tr {
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s ease;
+}
+
+tbody td {
+    min-width: 150px;
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.search-bar {
+    width: 300px;
+    padding: 10px;
+    margin-right: 20px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.icon-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-text {
+    margin: 0px;
+    padding: 0px;
+    font-size: 26px;
+}
+
+.header-container {
+    border-top: 2px solid black;
+    padding-top: 15px;
+    margin-top: 5px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-container {
+    width: 100px;
+    display: flex;
+    flex-direction: row;
+    padding: 5px;
+}
+
+.top-container {
+    border-top: 2px solid black;
+    padding-top: 10px;
+    padding-bottom: 15px;
+}
+
+.add-container:hover {
+    width: 102px;
+    cursor: pointer;
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+.searchbar-container {
+    display: flex;
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007BFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-align: center;
+}
+
+    .button:hover {
+        background-color: #0056b3;
+    }
+
+    .button:active {
+        background-color: #00408a;
+        transform: scale(0.98);
+    }
+
+.material-symbols-outlined {
+    font-size: 30px;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24
+}
+
+@media (max-width: 768px) {
+    table, thead, tbody, th, td, tr {
+        display: block;
+        width: 100%;
+    }
+
+    thead {
+        display: none;
+    }
+
+    tbody tr {
+        margin-bottom: 15px;
+        border: none;
+    }
+
+    tbody td {
+        display: block;
+        text-align: right;
+        border: none;
+        padding: 10px 20px;
+        position: relative;
+    }
+
+        tbody td::before {
+            content: attr(data-label);
+            position: absolute;
+            left: 0;
+            padding-left: 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+}
