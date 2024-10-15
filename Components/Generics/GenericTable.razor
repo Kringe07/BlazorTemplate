@@ -1,0 +1,62 @@
+﻿@using System.Drawing
+@typeparam T
+
+<div class="header-container">
+    <h2 class="header-text">@Title</h2>
+    @if (ErrorMessage != null)
+    {
+        <GenericErrorMessage Message="@ErrorMessage"></GenericErrorMessage>
+    }
+    @if (SearchFilter != null)
+    {
+        <div class="searchbar-container">
+            <div class="icon-container">
+                <span class="material-symbols-outlined">search</span>
+            </div>
+            <input type="text" placeholder="Search..." value="@SearchTerm" @oninput="@((search) => FilteredItems = 
+                                                                     Items.Where(x => SearchFilter((x, search.Value!.ToString()!))).ToList())" class="search-bar"/>
+        </div>
+    }
+    @if (OnAdd != null)
+    {
+        <div class="add-container" @onclick="OnAdd">
+            <span class="material-symbols-outlined">add</span>
+            <h2 class="header-text">Add</h2>
+        </div>
+    }
+</div>
+
+<table>
+    <thead>
+    <tr>
+        @foreach (var column in Columns)
+        {
+            <th>@column.Title</th>
+        }
+    </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in FilteredItems)
+        {
+            <tr @onclick="() => OnClick?.Invoke(item)">
+                @foreach (var column in Columns)
+                {
+                    switch (column)
+                    {
+                        case TextColumn<T> textColumn:
+                            <td>@textColumn.Data(item)</td>
+                            break;
+                        case ButtonColumn<T> buttonColumn:
+                            <td @onclick:stopPropagation="true" @onclick:preventDefault="true">
+                                <button style="background-color: @(ColorTranslator.ToHtml(buttonColumn.Color(item)))" class="button" 
+                                        @onclick="@(async () => await buttonColumn.Function(item))">
+                                    @(buttonColumn.ButtonName != null ? buttonColumn.ButtonName(item) : buttonColumn.Title)
+                                </button>
+                            </td>
+                            break;
+                    }
+                }
+            </tr>
+        }
+    </tbody>
+</table>
