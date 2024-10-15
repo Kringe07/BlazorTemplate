@@ -28,11 +28,10 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseStatusCodePagesWithRedirects("/404");
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
 app.UseAntiforgery();
-
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
