@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProjectName.DataAccess.DatabaseContext;
-using ProjectName.Entities;
+using ProjectName.DataAccess.Entities;
 
 namespace ProjectName.DataAccess.Repository
 {

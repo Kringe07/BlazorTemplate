@@ -1,4 +1,4 @@
-﻿namespace ProjectName.Entities;
+﻿namespace ProjectName.DataAccess.Entities;
 
 public class AuditableEntity
 {
