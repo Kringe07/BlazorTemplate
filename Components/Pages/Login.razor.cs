@@ -76,21 +76,35 @@ namespace ProjectName.Components.Pages
                 FailedAttempted();
                 return;
             }
-            ModalParameters ModalParams = new();
-            ModalParams.Add("Email", UserAccount.Email);
-            IModalReference emailInUseModal = Modal.Show<Verify2FaModal>("Twee-factor-authenticatiecode valideren", ModalParams);
-            ModalResult result = await emailInUseModal.Result;
-            if (result.Confirmed)
+            if (!string.IsNullOrEmpty(UserAccount.SecretKey))
             {
-                ToastService.ShowSuccess("Twee-factor-authenticatie goedgekeurd");
+                ModalParameters ModalParams = new();
+                ModalParams.Add("Email", UserAccount.Email);
+                IModalReference emailInUseModal = Modal.Show<Verify2FaModal>("Twee-factor-authenticatiecode valideren", ModalParams);
+                ModalResult result = await emailInUseModal.Result;
+                if (result.Confirmed)
+                {
+                    ToastService.ShowSuccess("Twee-factor-authenticatie goedgekeurd");
+                    await customAuthentication.UpdateAuthenticationState(new UserSession()
+                    {
+                        Email = UserAccount.Email,
+                        Role = UserAccount.Role.ToString(),
+                    });
+
+                    navigationManager.NavigateTo("/", true);
+                }
+            }
+            else
+            {
                 await customAuthentication.UpdateAuthenticationState(new UserSession()
                 {
                     Email = UserAccount.Email,
                     Role = UserAccount.Role.ToString(),
                 });
 
-                navigationManager.NavigateTo("/");
+                navigationManager.NavigateTo("/", true);
             }
+
         }
     }
 }

@@ -1,0 +1,15 @@
+﻿@page "/logout"
+
+@using ProjectName.Authentication
+
+@code
+{
+    [Inject] private AuthenticationStateProvider AuthStateProvider { get; set; } = default!;
+    [Inject] private NavigationManager navigationManager { get; set; } = default!;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await ((CustomAuthentication)AuthStateProvider).UpdateAuthenticationState(null);
+        navigationManager.NavigateTo("/", true);
+    }
+}
