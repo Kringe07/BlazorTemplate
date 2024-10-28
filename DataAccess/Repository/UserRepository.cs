@@ -27,6 +27,12 @@ namespace ProjectName.DataAccess.Repository
 
             return user;
         }
+        public async Task AddUser<T>(T user) where T : User
+        {
+            await using var context = await _context.CreateDbContextAsync();
+            context.Add(user);
+            await context.SaveChangesAsync();
+        }
         public async Task<User?> GetUserDataAsync(string Email)
         {
             try

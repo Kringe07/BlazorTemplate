@@ -9,6 +9,7 @@ namespace ProjectName.Seeder
 {
     public static class DumSeederDBInitializer
     {
+        // Generate Dummy Data for Database on Start of Project
         public static async void Seed(IServiceProvider serviceProvider)
         {
             using var context = new ProjectNameContext(serviceProvider.GetRequiredService<DbContextOptions<ProjectNameContext>>());
@@ -24,6 +25,8 @@ namespace ProjectName.Seeder
             }
             await context.SaveChangesAsync();
         }
+
+        // Generate Customers
         public static async Task<List<Customer>> CustomerSeeder(int Amount)
         {
             Faker<Customer> GenerateCustomer = new Faker<Customer>()
@@ -36,6 +39,7 @@ namespace ProjectName.Seeder
             return await Task.FromResult(s);
         }
 
+        // Generate Admin
         public static async Task<List<Admin>> AdminSeeder(int Amount)
         {
             Faker<Admin> GenerateAdmin = new Faker<Admin>()

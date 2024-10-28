@@ -23,21 +23,13 @@ else
     [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
 
     [Parameter] public required string Email { get; set; }
-    private string QrCodeImage = string.Empty;
-    private string SecretKey = string.Empty;
+    [Parameter] public required string QrCodeImage { get; set; }
+    [Parameter] public required string SecretKey { get; set; }
     private string ValidationMessage = string.Empty;
     private string OtpCode = string.Empty;
 
-    protected override async Task OnInitializedAsync()
-    {
-        SecretKey = AuthService.GenerateSecretKey();
-        string qrCodeUri = AuthService.GenerateQrCodeUri(Email, SecretKey);
-        QrCodeImage = AuthService.GenerateQrCodeImage(qrCodeUri);
-        await AuthService.EnableTwoFactorAuthenticationAsync(Email, SecretKey);
-    }
     private async Task ValidateCode()
     {
-        //string secretKey = await AuthService.GetUserSecretKeyAsync(Email);
 
         if (AuthService.ValidateOtpCode(OtpCode, SecretKey))
         {
@@ -48,5 +40,4 @@ else
             ValidationMessage = "Ongeldige code. Probeer het opnieuw.";
         }
     }
-    private async Task Ok() => await BlazoredModal.CloseAsync(ModalResult.Ok());
 }

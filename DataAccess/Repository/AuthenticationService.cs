@@ -9,7 +9,7 @@ namespace ProjectName.DataAccess.Repository
     public class AuthenticationService
     {
         private readonly IDbContextFactory<ProjectNameContext> _context;
-
+        private const string _issuer = "Projectname";
         public AuthenticationService(IDbContextFactory<ProjectNameContext> context)
         {
             _context = context;
@@ -25,8 +25,7 @@ namespace ProjectName.DataAccess.Repository
         // Generate the otpauth URI for Google Authenticator
         public string GenerateQrCodeUri(string userEmail, string secretKey)
         {
-            string issuer = "TEST";
-            return $"otpauth://totp/{issuer}:{userEmail}?secret={secretKey}&issuer={issuer}&digits=6";
+            return $"otpauth://totp/{_issuer}:{userEmail}?secret={secretKey}&issuer={_issuer}&digits=6";
         }
 
         // Generate a base64 image of the QR code

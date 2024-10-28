@@ -7,6 +7,7 @@
         private readonly int _maxFailedAttempts = 3;
         private readonly TimeSpan _lockoutTime = TimeSpan.FromMinutes(15);
 
+        // Check User if he is locked out
         public bool IsUserLockedOut(string username)
         {
             if (_failedLoginAttempts.TryGetValue(username, out var attempt))
@@ -19,6 +20,7 @@
             return false; // Not locked out
         }
 
+        // Record Times tried 
         public void RecordFailedAttempt(string username)
         {
             if (!_failedLoginAttempts.ContainsKey(username))
@@ -34,7 +36,7 @@
                 }
             }
         }
-
+        // Reset the failed attempts
         public void ResetFailedAttempts(string username)
         {
             if (_failedLoginAttempts.ContainsKey(username))
@@ -42,7 +44,7 @@
                 _failedLoginAttempts.Remove(username); // Reset on successful login
             }
         }
-
+        // Check time remaining
         public TimeSpan? GetLockoutTimeRemaining(string username)
         {
             if (_failedLoginAttempts.TryGetValue(username, out var attempt) && attempt.LockoutEnd.HasValue)
@@ -52,6 +54,7 @@
             return null;
         }
     }
+
     public class LoginAttempt
     {
         public int FailedAttempts { get; set; }

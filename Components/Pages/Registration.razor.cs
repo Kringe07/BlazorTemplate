@@ -14,6 +14,7 @@ namespace ProjectName.Components.Pages
     {
         [CascadingParameter] public IModalService Modal { get; set; } = default!;
         [Inject] private NavigationManager navigationManager { get; set; } = default!;
+        [Inject] private AuthenticationService AuthService { get; set; } = default!;
         [Inject] private UserRepository UserRepository { get; set; } = default!;
         public Admin NewAdmin { get; set; } = new Admin();
         public AuthModel authModel = new();
@@ -24,21 +25,30 @@ namespace ProjectName.Components.Pages
             User? UserAccount = await UserRepository.GetUserDataAsync(authModel.Email);
             if (UserAccount == null)
             {
-
                 NewAdmin.Password = BC.EnhancedHashPassword(authModel.Password);
                 NewAdmin.Email = authModel.Email;
                 NewAdmin.SecretKey = "";
                 await UserRepository.AddUser(NewAdmin);
                 if (await UserRepository.GetUserDataAsync(NewAdmin.Email) is not null)
                 {
+                    var options = new ModalOptions()
+                    {
+                        HideCloseButton = true,
+                        DisableBackgroundCancel = true
+                    };
                     ModalParameters ModalParams = new();
+                    string SecretKey = AuthService.GenerateSecretKey();
+                    string qrCodeUri = AuthService.GenerateQrCodeUri(NewAdmin.Email, SecretKey);
+                    await AuthService.EnableTwoFactorAuthenticationAsync(NewAdmin.Email, SecretKey);
                     ModalParams.Add("Email", NewAdmin.Email);
-                    IModalReference emailInUseModal = Modal.Show<Setup2FaModal>("Twee-factor-authenticatie instellen", ModalParams);
+                    ModalParams.Add("SecretKey", SecretKey);
+                    ModalParams.Add("QrCodeImage", AuthService.GenerateQrCodeImage(qrCodeUri));
+                    IModalReference emailInUseModal = Modal.Show<Setup2FaModal>("Twee-factor-authenticatie instellen", ModalParams, options);
                     ModalResult result = await emailInUseModal.Result;
                     if (result.Confirmed)
                     {
                         ToastService.ShowSuccess("Twee-factor-authenticatie klaarzetten gelukt");
-                        navigationManager.NavigateTo("/");
+                        navigationManager.NavigateTo("/", true);
                     }
                 }
             }
