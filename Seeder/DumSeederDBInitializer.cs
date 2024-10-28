@@ -1,5 +1,6 @@
 ﻿using Bogus;
 using Microsoft.EntityFrameworkCore;
+using OtpNet;
 using ProjectName.DataAccess.DatabaseContext;
 using ProjectName.DataAccess.Entities;
 using BC = BCrypt.Net.BCrypt;
@@ -30,7 +31,7 @@ namespace ProjectName.Seeder
                              .RuleFor(u => u.Id, f => Guid.NewGuid())
                              .RuleFor(u => u.Email, f => f.Person.Email)
                              .RuleFor(u => u.Password, f => BC.EnhancedHashPassword("password"))
-                             .RuleFor(u => u.SecretKey, f => "");
+                             .RuleFor(u => u.SecretKey, f => GenerateSecretKey());
             List<Customer> s = GenerateCustomer.Generate(Amount);
             return await Task.FromResult(s);
         }
@@ -42,9 +43,16 @@ namespace ProjectName.Seeder
                  .RuleFor(u => u.Id, f => Guid.NewGuid())
                  .RuleFor(u => u.Email, f => f.Person.Email)
                  .RuleFor(u => u.Password, f => BC.EnhancedHashPassword("password"))
-                 .RuleFor(u => u.SecretKey, f => "");
+                 .RuleFor(u => u.SecretKey, f => GenerateSecretKey());
             List<Admin> s = GenerateAdmin.Generate(Amount);
             return await Task.FromResult(s);
+        }
+
+        // Generate secret key for user
+        public static string GenerateSecretKey()
+        {
+            byte[] key = KeyGeneration.GenerateRandomKey(20);
+            return Base32Encoding.ToString(key);
         }
     }
 }

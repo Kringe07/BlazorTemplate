@@ -26,6 +26,8 @@ namespace ProjectName.Components.Pages
 
         private string error = string.Empty;
 
+        private bool Enable2fa { get; set; } = true;
+
         private Model model = new Model();
 
         private void FailedAttempted()
@@ -40,9 +42,9 @@ namespace ProjectName.Components.Pages
                 error = "Foutieve Email, wachtwoord combinatie.";
             }
         }
+
         private async Task Authenticate()
         {
-
             if (LoginAttemptService.IsUserLockedOut(model.Email))
             {
                 var timeRemaining = LoginAttemptService.GetLockoutTimeRemaining(model.Email);
@@ -52,35 +54,22 @@ namespace ProjectName.Components.Pages
             }
             User? UserAccount = await UserRepository.GetUserDataAsync(model.Email);
             CustomAuthentication customAuthentication = (CustomAuthentication)StateProvider;
-            ////No check for customers
-            //var customAuthentication = (CustomAuthentication)StateProvider;
-            //if (UserAccount is Customer customer)
-            //{
-            //    if (customer.IsBlocked)
-            //    {
-            //        error = "Account is geblokkeerd";
-            //        StateHasChanged();
-            //        return;
-            //    }
-
-            //    await customAuthentication.UpdateAuthenticationState(new UserSession()
-            //    {
-            //        Email = UserAccount.Email,
-            //        Role = UserAccount.Role.ToString(),
-            //    });
-            //    navigationManager.NavigateTo("/");
-            //}
-
             if (UserAccount == null || !BC.EnhancedVerify(model.Password, UserAccount.Password))
             {
                 FailedAttempted();
                 return;
             }
-            if (!string.IsNullOrEmpty(UserAccount.SecretKey))
+
+            if (Enable2fa)
             {
+                var options = new ModalOptions()
+                {
+                    HideCloseButton = true,
+                    DisableBackgroundCancel = true
+                };
                 ModalParameters ModalParams = new();
                 ModalParams.Add("Email", UserAccount.Email);
-                IModalReference emailInUseModal = Modal.Show<Verify2FaModal>("Twee-factor-authenticatiecode valideren", ModalParams);
+                IModalReference emailInUseModal = Modal.Show<Verify2FaModal>("Twee-factor-authenticatiecode valideren", ModalParams, options);
                 ModalResult result = await emailInUseModal.Result;
                 if (result.Confirmed)
                 {
@@ -91,7 +80,6 @@ namespace ProjectName.Components.Pages
                         Role = UserAccount.Role.ToString(),
                     });
 
-                    navigationManager.NavigateTo("/", true);
                 }
             }
             else
@@ -101,10 +89,8 @@ namespace ProjectName.Components.Pages
                     Email = UserAccount.Email,
                     Role = UserAccount.Role.ToString(),
                 });
-
-                navigationManager.NavigateTo("/", true);
             }
-
+            navigationManager.NavigateTo("/", true);
         }
     }
 }
