@@ -30,6 +30,7 @@ namespace ProjectName.Components.Pages
 
         private Model model = new Model();
 
+        //Check Failed Attempts if you have tried 3 times u are locked out for 15min
         private void FailedAttempted()
         {
             LoginAttemptService.RecordFailedAttempt(model.Email);
@@ -43,6 +44,12 @@ namespace ProjectName.Components.Pages
             }
         }
 
+        //This is the Authentication system kinda
+        // 1. check is user is not locked out else try later again
+        // 2. check if user exists in the database and if the password is correct
+        // 3. check if 2 FA is enabled [Yes] : Show 2 Fa verifaction modal [NO] : Skip the 2 Fa 
+        // 4. Update Authentication and add set it in the session storage
+        // 5. Reload Page So you can see what you can do on the website with your Roll
         private async Task Authenticate()
         {
             if (LoginAttemptService.IsUserLockedOut(model.Email))

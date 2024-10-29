@@ -2,6 +2,7 @@
 
 namespace ProjectName.CustomAttribute
 {
+    //Validate date of birth you need to be at least 1 years old 
     [System.AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
     public class DateOfBirthAttribute : ValidationAttribute
     {

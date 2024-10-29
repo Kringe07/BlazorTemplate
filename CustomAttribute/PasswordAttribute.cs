@@ -2,6 +2,7 @@
 
 namespace ProjectName.CustomAttribute
 {
+    //Validate Password It needs at least: [1 capital letter] [1 lowercase letter] [1 number] [1 unique character like : !@#$%^&*] 
     [System.AttributeUsage(AttributeTargets.Property | AttributeTargets.Field, AllowMultiple = false)]
     public class PasswordAttribute : ValidationAttribute
     {

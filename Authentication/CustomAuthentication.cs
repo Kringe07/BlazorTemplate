@@ -1,18 +1,21 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Components.Authorization;
+﻿using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using System.Security.Claims;
 
 namespace ProjectName.Authentication
 {
     public class CustomAuthentication : AuthenticationStateProvider
     {
         public readonly ProtectedSessionStorage _sessionstorage;
+
         private ClaimsPrincipal _guest = new(new ClaimsIdentity());
+
         public CustomAuthentication(ProtectedSessionStorage sessionStorage)
         {
             _sessionstorage = sessionStorage;
         }
 
+        // Get the authentication out of the Sessionstorage
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             try
@@ -24,8 +27,7 @@ namespace ProjectName.Authentication
                 ClaimsPrincipal ClaimsPrincipal = new(new ClaimsIdentity(new List<Claim>
                     {
                         new Claim(ClaimTypes.Email, userSession.Email),
-                        new Claim(ClaimTypes.Role, userSession.Role),
-                        new Claim(ClaimTypes.NameIdentifier, userSession.Id.ToString())
+                        new Claim(ClaimTypes.Role, userSession.Role)
                     },
                     "CustomAuth"
                 ));
@@ -37,7 +39,7 @@ namespace ProjectName.Authentication
             }
         }
 
-
+        // Updates the authentication and set it in the Sessionstorage
         public async Task UpdateAuthenticationState(UserSession? userSession)
         {
             ClaimsPrincipal claimsPrincipal;

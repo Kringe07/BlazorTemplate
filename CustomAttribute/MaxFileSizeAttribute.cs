@@ -11,6 +11,7 @@ namespace ProjectName.CustomAttribute
             _maxFileSize = maxFileSize;
         }
 
+        //Validate file on file size 
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             if (value is byte[] fileData)

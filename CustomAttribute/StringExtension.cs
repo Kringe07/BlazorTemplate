@@ -2,6 +2,7 @@
 {
     public static class StringExtensions
     {
+        //Set First letter of sting to Uppercase
         public static string FirstCharToUpper(this string input) =>
             input switch
             {

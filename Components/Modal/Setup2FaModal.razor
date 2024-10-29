@@ -28,9 +28,9 @@ else
     private string ValidationMessage = string.Empty;
     private string OtpCode = string.Empty;
 
+    //Validate the code if its correct if not try it again until its right
     private async Task ValidateCode()
     {
-
         if (AuthService.ValidateOtpCode(OtpCode, SecretKey))
         {
             await BlazoredModal.CloseAsync(ModalResult.Ok());

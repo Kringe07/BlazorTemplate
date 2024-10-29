@@ -7,6 +7,7 @@
     [Inject] private AuthenticationStateProvider AuthStateProvider { get; set; } = default!;
     [Inject] private NavigationManager navigationManager { get; set; } = default!;
 
+    // Log out the user when he gets on this page and reload the website so that the Authentication is updated
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         await ((CustomAuthentication)AuthStateProvider).UpdateAuthenticationState(null);

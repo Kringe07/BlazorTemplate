@@ -20,6 +20,11 @@ namespace ProjectName.Components.Pages
         public AuthModel authModel = new();
         private string ErrorMessage { get; set; } = string.Empty;
 
+        // This is kinda the registration system
+        // 1. check if user email not already exist in the database
+        // 2. set every thing in the new object class and save the user in the database
+        // 3. show the 2 Fa and set it on
+        // 4. show Toast when done and succeeded Return to main page
         private async Task Register()
         {
             User? UserAccount = await UserRepository.GetUserDataAsync(authModel.Email);

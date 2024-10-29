@@ -12,12 +12,14 @@ namespace ProjectName.DataAccess.Repository
         {
             _context = context;
         }
+        // Get all Users
         public async Task<List<T>> GetUsers<T>() where T : User
         {
             await using var context = await _context.CreateDbContextAsync();
             return await context.Users.OfType<T>().ToListAsync();
         }
 
+        // Get 1 User with Id
         public async Task<T> GetUser<T>(Guid id) where T : User
         {
             await using var context = await _context.CreateDbContextAsync();
@@ -27,12 +29,16 @@ namespace ProjectName.DataAccess.Repository
 
             return user;
         }
+
+        // Add new User
         public async Task AddUser<T>(T user) where T : User
         {
             await using var context = await _context.CreateDbContextAsync();
             context.Add(user);
             await context.SaveChangesAsync();
         }
+
+        //Get 1 User with Email
         public async Task<User?> GetUserDataAsync(string Email)
         {
             try
