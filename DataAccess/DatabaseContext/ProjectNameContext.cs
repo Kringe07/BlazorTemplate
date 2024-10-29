@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ProjectName.Entities;
+using ProjectName.DataAccess.Entities;
 
 namespace ProjectName.DataAccess.DatabaseContext;
 

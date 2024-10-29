@@ -1,6 +1,6 @@
 ﻿using ProjectName.DataAccess.Enums;
 
-namespace ProjectName.Entities;
+namespace ProjectName.DataAccess.Entities;
 
 public class Admin : User
 {

@@ -1,0 +1,31 @@
+﻿@using ProjectName.DataAccess.Repository
+
+@inject AuthenticationService AuthService
+
+<input type="text" @bind="OtpCode" class="form-control m-3" placeholder="Enter code" />
+<p class="text-danger text-center mx-auto d-block">@ValidationMessage</p>
+<button class="btn btn-primary btn-lg w-50 mx-auto d-block m-3 " @onclick="ValidateCode">Submit</button>
+
+
+@code {
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
+    [Parameter] public required string Email { get; set; }
+    private string OtpCode = string.Empty;
+    private string ValidationMessage = string.Empty;
+
+    //Validate the code if its correct if not try it again until its right
+    private async Task ValidateCode()
+    {
+        string secretKey = await AuthService.GetUserSecretKeyAsync(Email);  
+
+        if (AuthService.ValidateOtpCode(OtpCode, secretKey))
+        {
+            await BlazoredModal.CloseAsync(ModalResult.Ok());
+        }
+        else
+        {
+            ValidationMessage = "Ongeldige code. Probeer het opnieuw.";
+        }
+    }
+}

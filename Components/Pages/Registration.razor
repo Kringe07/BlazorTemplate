@@ -1,0 +1,25 @@
+﻿@page "/Registration"
+@inject IToastService ToastService
+
+<div class="Login-card">
+    <h2>Registration</h2>
+    <EditForm FormName="Registration" OnValidSubmit="Register" Model="authModel">
+        <DataAnnotationsValidator />
+        <div>
+            <ValidationMessage For="() => authModel.Email" />
+            <label>Email</label>
+            <input type="email" @bind-value="authModel.Email" placeholder="Email" />
+        </div>
+        <div>
+            <ValidationMessage For="() => authModel.Password" />
+            <label>Password</label>
+            <input type="password" @bind-value="authModel.Password" placeholder="Password" />
+        </div>
+        <div>
+            <ValidationMessage For="() => authModel.CPassword" />
+            <label>Confirm Password</label>
+            <input type="password" @bind-value="authModel.CPassword" placeholder="Confirm Password" />
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Register</button>
+    </EditForm> 
+</div> 

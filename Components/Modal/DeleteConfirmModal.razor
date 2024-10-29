@@ -1,0 +1,14 @@
+﻿<h5>Weet je zeker dat je @((MarkupString)ObjectName) wilt verwijderen?</h5>
+<div class="mx-auto d-block">
+    <button class="btn btn-danger " @onclick="Cancel">Cancel</button>
+    <button class="btn btn-success" @onclick="Ok">Confirm</button>
+</div>
+
+@code {
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+
+    [Parameter] public required string ObjectName { get; set; }
+
+    private async Task Ok() => await BlazoredModal.CloseAsync(ModalResult.Ok());
+    private async Task Cancel() => await BlazoredModal.CloseAsync(ModalResult.Cancel());
+}
