@@ -10,10 +10,7 @@ namespace ProjectName.Components.Pages
         [CascadingParameter] public IModalService Modal { get; set; } = default!;
         [Inject] private NavigationManager navigationManager { get; set; } = default!;
 
-        //protected async override Task OnInitializedAsync()
-        //{
-
-        //}
+        public byte[] Image { get; set; } = new byte[0];
 
         public async Task Button()
         {
