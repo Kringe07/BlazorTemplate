@@ -1,0 +1,11 @@
+﻿<EditForm Model="_imageModel">
+
+    <div>
+        <ValidationMessage For="@(() => _imageModel.Image)" />
+        @if (!string.IsNullOrEmpty(FileError))
+        {
+            <p class="text-danger">@FileError</p>
+        }
+        <InputFile class="form-control" OnChange="@SingleUpload" />
+    </div>
+</EditForm>
