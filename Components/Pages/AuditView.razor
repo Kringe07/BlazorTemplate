@@ -1,0 +1,91 @@
+﻿@page "/audit/{id}"
+
+@if (PageError != "")
+{
+    <PageError Message="@PageError"></PageError>
+}
+else if (Audit == null)
+{
+    <LoadingIcon></LoadingIcon>
+}
+else
+{
+    <div class="header-container">
+        <h3>Auditview</h3>
+    </div>
+
+    <div class="form-container">
+        <div class="input-container">
+            <label>Tablename</label>
+            <input type="text" value="@Audit.TableName" readonly class="form-control" />
+        </div>
+        <div class="input-container">
+            <label>EntityId</label>
+            <input type="text" value="@Audit.EntityId" readonly class="form-control"/>
+        </div>
+        <div class="input-container">
+            <label>Date</label>
+            <input type="text" value="@(Audit.TimeStamp.ToString("yyyy-MM-dd HH:mm"))" readonly="true" class="form-control" />
+        </div>
+        <div class="input-container">
+            <label>Email</label>
+            <input type="text" value="@Audit.UserEmail" readonly class="form-control" />
+        </div>
+    </div>
+
+    @if (Audit.Changes == "{}")
+    {
+        <div class="header-container">
+            <h3>Value</h3>
+        </div>
+
+        <div class="form-container">
+            <div style="white-space: pre-wrap;" class="input-container">
+                <pre>
+                @(FormatJsonText(Audit.OriginalValue))
+            </pre>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="header-container">
+            <h3>Changes</h3>
+        </div>
+
+        <div class="form-container">
+            <div style="white-space: pre-wrap;" class="input-container">
+                @foreach (var change in GetChanges())
+                {
+                    <p>
+                        @($"property '{change.EntityName}' has been changed from '{change.OldValue}' to '{change.NewValue}'")
+                    </p>
+                }
+            </div>
+        </div>
+
+        <div class="header-container">
+            <h3>Changes Json</h3>
+        </div>
+
+        <div class="form-container">
+            <div style="white-space: pre-wrap;" class="input-container">
+                <pre>
+                @(FormatJsonText(Audit.Changes))
+            </pre>
+            </div>
+        </div>
+
+        <div class="header-container">
+            <h3>Original value</h3>
+        </div>
+
+        <div class="form-container">
+            <div style="white-space: pre-wrap;" class="input-container">
+                <pre>
+                @(FormatJsonText(Audit.OriginalValue))
+            </pre>
+            </div>
+        </div>
+    }
+}
