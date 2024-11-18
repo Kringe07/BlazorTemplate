@@ -1,0 +1,23 @@
+﻿@page "/audits"
+@using ProjectName.DataAccess.Entities
+
+@if (PageError != "")
+{
+    <PageError Message="@PageError"></PageError>
+}
+else if (Audits == null)
+{
+    <LoadingIcon></LoadingIcon>
+}
+else
+{
+    <GenericTable T="Audit" Title="Audits" Items="@(Audits.OrderByDescending(a => a.TimeStamp).ToList())" ErrorMessage="@PageError"                  
+      OnClick="@(a => NavigationManager.NavigateTo($"/audit/{a.Id}"))" 
+      Columns="@(new List<ColumnDefinition<Audit>> {
+       new TextColumn<Audit> { Data = a => a.EntityId.ToString(), Title = "Entity ID"},
+       new TextColumn<Audit> { Data = a => a.TimeStamp.ToString("yyyy-MM-dd HH:mm"), Title = "Timestamp"},
+       new TextColumn<Audit> { Data = a => a.TableName, Title = "Table" },
+       new TextColumn<Audit> { Data = a => a.Action, Title = "Action" },
+       new TextColumn<Audit> { Data = a => a.UserEmail ?? "No user", Title = "User" } 
+   })"></GenericTable>
+}
