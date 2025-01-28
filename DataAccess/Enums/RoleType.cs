@@ -1,6 +1,6 @@
 ﻿namespace ProjectName.DataAccess.Enums;
 
-public enum Role
+public enum RoleType
 {
     Admin,
     Customer

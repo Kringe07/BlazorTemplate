@@ -1,4 +1,4 @@
-﻿namespace DigiDate.Database.Attributes;
+﻿namespace ProjectName.CustomAttribute;
 
 [AttributeUsage(AttributeTargets.Property)]
 public sealed class SensitiveData : Attribute;

@@ -1,4 +1,4 @@
-﻿namespace DigiDate.Models;
+﻿namespace ProjectName.Models;
 
 public class AuditUser
 {

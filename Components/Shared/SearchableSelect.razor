@@ -1,0 +1,26 @@
+@typeparam TItem
+
+<div class="form-cont">
+    <div class="dropdown-container">
+        <input
+            disabled="@Disabled"
+            id="@InputId"
+            type="text"
+            placeholder="@Placeholder"
+            @bind="SearchText"
+            @onfocus="ShowDropdown"
+            @onblur="HideDropdownWithDelay" />
+
+        @if (IsDropdownVisible)
+        {
+            <ul class="dropdown-list">
+                @foreach (var item in FilteredItems)
+                {
+                    <li class="dropdown-item" @onclick="() => SelectItem(item)">
+                        @ItemToString(item)
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</div>
