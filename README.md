@@ -1,3 +1,1 @@
-Common abbreviations:
-Mp = Marktplaays
-Ad = Advertisement
+Blazor template for school
