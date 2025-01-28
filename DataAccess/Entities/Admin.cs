@@ -4,5 +4,5 @@ namespace ProjectName.DataAccess.Entities;
 
 public class Admin : User
 {
-    public override Role Role => Role.Admin;
+    public override RoleType RoleType => RoleType.Admin;
 }

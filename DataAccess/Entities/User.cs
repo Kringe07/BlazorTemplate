@@ -9,5 +9,5 @@ public abstract class User : AuditableEntity
     public string Password { get; set; }
     public string SecretKey { get; set; } = string.Empty;
     [NotMapped]
-    public abstract Role Role { get; }
+    public abstract RoleType RoleType { get; }
 }

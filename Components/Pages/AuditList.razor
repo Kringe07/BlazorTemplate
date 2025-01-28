@@ -13,7 +13,7 @@ else
 {
     <GenericTable T="Audit" Title="Audits" Items="@(Audits.OrderByDescending(a => a.TimeStamp).ToList())" ErrorMessage="@PageError"                  
       OnClick="@(a => NavigationManager.NavigateTo($"/audit/{a.Id}"))" 
-      Columns="@(new List<ColumnDefinition<Audit>> {
+      Columns="@(new List<ColumnDefinition> {
        new TextColumn<Audit> { Data = a => a.EntityId.ToString(), Title = "Entity ID"},
        new TextColumn<Audit> { Data = a => a.TimeStamp.ToString("yyyy-MM-dd HH:mm"), Title = "Timestamp"},
        new TextColumn<Audit> { Data = a => a.TableName, Title = "Table" },

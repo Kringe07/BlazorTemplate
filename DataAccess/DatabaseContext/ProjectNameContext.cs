@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using ProjectName.DataAccess.Entities;
 using System.Text.Json;
-using DigiDate.Database.Attributes;
-using DigiDate.Models;
+using ProjectName.CustomAttribute;
+using ProjectName.Models;
 
 namespace ProjectName.DataAccess.DatabaseContext;
 

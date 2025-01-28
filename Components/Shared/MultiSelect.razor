@@ -1,0 +1,37 @@
+@typeparam TItem
+<div class="form-cont">
+    <div class="dropdown-container">
+        <input
+            id="@InputId"
+            type="text"
+            placeholder="@Placeholder"
+            @bind="SearchText"
+            @onfocus="ShowDropdown"
+            @onblur="HideDropdownWithDelay" />
+
+        <div class="selected-items">
+            @foreach (var selectedItem in SelectedItems)
+            {
+                <span class="selected-item">
+                    @ItemToString(selectedItem)
+                    <button type="button" class="remove-item" @onclick="() => RemoveItem(selectedItem)">x</button>
+                </span>
+            }
+        </div>
+
+        @if (IsDropdownVisible && !IsMaxReached)
+        {
+            <ul class="dropdown-list">
+                @foreach (var item in FilteredItems)
+                {
+                    if (!SelectedItems.Contains(item))
+                    {
+                        <li class="dropdown-item" @onclick="() => SelectItem(item)">
+                            @ItemToString(item)
+                        </li>
+                    }
+                }
+            </ul>
+        }
+    </div>
+</div>

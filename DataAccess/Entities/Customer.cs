@@ -4,5 +4,5 @@ namespace ProjectName.DataAccess.Entities;
 
 public class Customer : User
 {
-    public override Role Role => Role.Customer;
+    public override RoleType RoleType => RoleType.Customer;
 }

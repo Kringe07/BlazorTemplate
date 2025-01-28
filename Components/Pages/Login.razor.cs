@@ -84,7 +84,7 @@ namespace ProjectName.Components.Pages
                     await customAuthentication.UpdateAuthenticationState(new UserSession()
                     {
                         Email = UserAccount.Email,
-                        Role = UserAccount.Role.ToString(),
+                        Role = UserAccount.RoleType.ToString(),
                     });
 
                 }
@@ -94,7 +94,7 @@ namespace ProjectName.Components.Pages
                 await customAuthentication.UpdateAuthenticationState(new UserSession()
                 {
                     Email = UserAccount.Email,
-                    Role = UserAccount.Role.ToString(),
+                    Role = UserAccount.RoleType.ToString(),
                 });
             }
             navigationManager.NavigateTo("/", true);
