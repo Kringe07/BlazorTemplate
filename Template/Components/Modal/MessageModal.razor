@@ -1,0 +1,11 @@
+﻿<h5>@((MarkupString)Text)</h5>
+
+<button class="btn btn-primary" @onclick="Ok">Ok</button>
+
+@code {
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = null!;
+
+    [Parameter] public required string Text { get; set; }
+
+    private async Task Ok() => await BlazoredModal.CloseAsync(ModalResult.Ok());
+}

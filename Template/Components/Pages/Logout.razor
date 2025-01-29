@@ -1,0 +1,16 @@
+﻿@page "/logout"
+
+@using ProjectName.Authentication
+
+@code
+{
+    [Inject] private AuthenticationStateProvider AuthStateProvider { get; set; } = null!;
+    [Inject] private NavigationManager NavigationManager { get; set; } = null!;
+
+    // Log out the user when he gets on this page and reload the website so that the Authentication is updated
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await ((CustomAuthentication)AuthStateProvider).UpdateAuthenticationState(null);
+        NavigationManager.NavigateTo("/", true);
+    }
+}

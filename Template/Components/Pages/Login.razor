@@ -1,0 +1,24 @@
+﻿@page "/Login"
+@inject LoginAttemptService LoginAttemptService
+@inject IToastService ToastService
+@using ProjectName.Service
+
+<div class="Login-card">
+    <div>Login</div>
+    @if (_error != string.Empty)
+    {
+        <div class="mb-2">
+            <b class="text-danger">@_error</b>
+        </div>
+
+    }
+    <div>
+        <input type="Email" placeholder="Email" @bind-value="_model.Email" />
+    </div>
+    <div>
+        <input type="password" placeholder="Password..." @bind-value="_model.Password" />
+    </div>
+    <div>
+        <button class="Login-button" @onclick="Authenticate">Login</button>
+    </div>
+</div>
