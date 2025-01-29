@@ -3,22 +3,22 @@
 
 <div class="Login-card">
     <h2>Registration</h2>
-    <EditForm FormName="Registration" OnValidSubmit="Register" Model="authModel">
+    <EditForm FormName="Registration" OnValidSubmit="Register" Model="Auth">
         <DataAnnotationsValidator />
         <div>
-            <ValidationMessage For="() => authModel.Email" />
+            <ValidationMessage For="() => Auth.Email" />
             <label>Email</label>
-            <input type="email" @bind-value="authModel.Email" placeholder="Email" />
+            <input type="email" @bind-value="Auth.Email" placeholder="Email" />
         </div>
         <div>
-            <ValidationMessage For="() => authModel.Password" />
+            <ValidationMessage For="() => Auth.Password" />
             <label>Password</label>
-            <input type="password" @bind-value="authModel.Password" placeholder="Password" />
+            <input type="password" @bind-value="Auth.Password" placeholder="Password" />
         </div>
         <div>
-            <ValidationMessage For="() => authModel.CPassword" />
+            <ValidationMessage For="() => Auth.CPassword" />
             <label>Confirm Password</label>
-            <input type="password" @bind-value="authModel.CPassword" placeholder="Confirm Password" />
+            <input type="password" @bind-value="Auth.CPassword" placeholder="Confirm Password" />
         </div>
         <button type="submit" class="btn btn-primary btn-block">Register</button>
     </EditForm> 

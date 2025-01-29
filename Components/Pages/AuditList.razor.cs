@@ -14,6 +14,7 @@ public partial class AuditList : ComponentBase
     private List<Audit>? Audits { get; set; }
     private string PageError { get; set; } = string.Empty;
 
+    //Initialize component
     protected override async Task OnInitializedAsync()
     {
         try

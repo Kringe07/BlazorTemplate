@@ -3,7 +3,7 @@
 <button class="btn btn-primary" @onclick="Ok">Ok</button>
 
 @code {
-    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = default!;
+    [CascadingParameter] BlazoredModalInstance BlazoredModal { get; set; } = null!;
 
     [Parameter] public required string Text { get; set; }
 

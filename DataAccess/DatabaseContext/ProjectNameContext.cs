@@ -12,6 +12,7 @@ public class ProjectNameContext(DbContextOptions<ProjectNameContext> options) : 
     public virtual DbSet<User> Users { get; set; } = null!;
     public virtual DbSet<Audit> Audits { get; set; } = null!;
 
+    //Save changes and call audits
     public async Task<int> SaveChangesAndAudit(AuditUser user)
     {
         CreateAudits(user);
@@ -26,6 +27,7 @@ public class ProjectNameContext(DbContextOptions<ProjectNameContext> options) : 
         base.OnModelCreating(modelBuilder);
     }
 
+    //Create audits for a savechanges call
     private void CreateAudits(AuditUser user)
     {
         var auditEntries = new List<Audit>();
@@ -50,16 +52,20 @@ public class ProjectNameContext(DbContextOptions<ProjectNameContext> options) : 
         Audits.AddRange(auditEntries);
     }
 
+    //Get changes in changetracker
     private static string GetChanges(EntityEntry entry) =>
         JsonSerializer.Serialize(entry.Properties.Where(p => p.IsModified && !CheckForSensitiveProperty(p)).ToDictionary(p => p.Metadata.Name,
             p => (entry.State == EntityState.Deleted ? p.OriginalValue : p.CurrentValue)!));
 
+    //Get original value
     private static string GetOriginalValue(EntityEntry entry) =>
         JsonSerializer.Serialize(entry.Properties.Where(p => !CheckForSensitiveProperty(p)).ToDictionary(p => p.Metadata.Name, ProcessPropertyEntry));
 
+    //filter out senstivedata
     private static bool CheckForSensitiveProperty(PropertyEntry propertyEntry) =>
         propertyEntry.Metadata.PropertyInfo!.GetCustomAttributes(typeof(SensitiveData), false).Any();
 
+    //Process property
     private static string ProcessPropertyEntry(PropertyEntry propertyInfo) =>
         (propertyInfo.OriginalValue is DateTime dateTime ? dateTime.ToString("yyyy-MM-dd HH:mm") : propertyInfo.OriginalValue?.ToString())!;
 }

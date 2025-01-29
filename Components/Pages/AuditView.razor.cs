@@ -15,6 +15,7 @@ public partial class AuditView : ComponentBase
     private Audit? Audit { get; set; }
     private string PageError { get; set;  } = string.Empty;
 
+    //Initialize component
     protected override async Task OnInitializedAsync()
     {
         try
@@ -28,6 +29,7 @@ public partial class AuditView : ComponentBase
         }
     }
 
+    //Get changed properties of entry
     private IEnumerable<ChangeEntry> GetChanges()
     {
         using var oldValues = JsonDocument.Parse(Audit!.OriginalValue);
@@ -41,7 +43,8 @@ public partial class AuditView : ComponentBase
             };
     }
 
-    private static string FormatJsonText(string jsonString) //TODO Maybe improve
+    //Format the text
+    private static string FormatJsonText(string jsonString)
     {
         using var doc = JsonDocument.Parse(jsonString, new JsonDocumentOptions { AllowTrailingCommas = true });
         var memoryStream = new MemoryStream();

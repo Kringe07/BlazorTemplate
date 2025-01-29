@@ -22,9 +22,11 @@ public partial class GenericTable<T> : ComponentBase
 
     private List<T> FilteredItems { get; set; } = null!;
 
+    //Initialize component
     protected override void OnInitialized() => FilteredItems = FilterDisabledItems(Items);
 
-    public void Filter(string? term = null)
+    //Filter items
+    private void Filter(string? term = null)
     {
         SearchTerm = term ?? SearchTerm;
 
@@ -39,12 +41,15 @@ public partial class GenericTable<T> : ComponentBase
         }
     }
 
+    //If support for disabling items while toggle these
     private void ToggleShowDisabled()
     {
         ShowDisabled = !ShowDisabled;
         FilteredItems = ShowDisabled ? ApplySearchFilter(Items, SearchTerm) : FilterDisabledItems(FilteredItems);
     }
 
+    
+    //if support for disabling items while filter these
     private static List<T> FilterDisabledItems(List<T> items)
     {
         if (items is IEnumerable<IArchivableEntity> archivableEntities)
@@ -52,6 +57,7 @@ public partial class GenericTable<T> : ComponentBase
         return items;
     }
 
+    //Applies search filter
     private List<T> ApplySearchFilter(IEnumerable<T> items, string searchTerm)
     {
         return SearchFilter == null ? Items : items.Where(x => SearchFilter!((x, searchTerm))).ToList();
@@ -60,12 +66,12 @@ public partial class GenericTable<T> : ComponentBase
 
 public abstract class ColumnDefinition
 {
-    public required string Title { get; set; }
+    public required string Title { get; init; }
 }
 
 public class TextColumn<T> : ColumnDefinition
 {
-    public required Func<T, string> Data { get; set; }
+    public required Func<T, string> Data { get; init; }
 }
 
 public class ButtonColumn<T> : ColumnDefinition

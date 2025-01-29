@@ -13,7 +13,7 @@ namespace ProjectName.Components.Shared
         private List<string> _checkType = new List<string>() { ".jpg", ".png" };
         private ImageModel _imageModel = new ImageModel();
 
-        public class ImageModel()
+        public class ImageModel
         {
             [RequiredCustom("Foto")]
             [MaxFileSize(10 * 1024 * 1024, ErrorMessage = "File size cannot exceed 10 MB.")]

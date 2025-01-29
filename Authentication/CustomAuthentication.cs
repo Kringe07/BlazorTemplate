@@ -2,63 +2,55 @@
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using System.Security.Claims;
 
-namespace ProjectName.Authentication
+namespace ProjectName.Authentication;
+
+public class CustomAuthentication(ProtectedSessionStorage sessionStorage) : AuthenticationStateProvider
 {
-    public class CustomAuthentication : AuthenticationStateProvider
+    private readonly ClaimsPrincipal _guest = new(new ClaimsIdentity());
+
+    // Get the authentication out of the Sessionstorage
+    public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        public readonly ProtectedSessionStorage _sessionstorage;
-
-        private ClaimsPrincipal _guest = new(new ClaimsIdentity());
-
-        public CustomAuthentication(ProtectedSessionStorage sessionStorage)
+        try
         {
-            _sessionstorage = sessionStorage;
-        }
+            var userSessionResult = await sessionStorage.GetAsync<UserSession>("UserSession");
+            var userSession = userSessionResult.Success ? userSessionResult.Value : null;
 
-        // Get the authentication out of the Sessionstorage
-        public override async Task<AuthenticationState> GetAuthenticationStateAsync()
-        {
-            try
-            {
-                ProtectedBrowserStorageResult<UserSession> userSessionResult = await _sessionstorage.GetAsync<UserSession>("UserSession");
-                UserSession? userSession = userSessionResult.Success ? userSessionResult.Value : null;
-
-                if (userSession == null) return await Task.FromResult(new AuthenticationState(_guest));
-                ClaimsPrincipal ClaimsPrincipal = new(new ClaimsIdentity(new List<Claim>
-                    {
-                        new Claim(ClaimTypes.Email, userSession.Email),
-                        new Claim(ClaimTypes.Role, userSession.Role)
-                    },
+            if (userSession == null) return await Task.FromResult(new AuthenticationState(_guest));
+                ClaimsPrincipal claimsPrincipal = new(new ClaimsIdentity(new List<Claim>
+                {
+                    new(ClaimTypes.Email, userSession.Email),
+                    new(ClaimTypes.Role, userSession.Role)
+                },
                     "CustomAuth"
                 ));
-                return await Task.FromResult(new AuthenticationState(ClaimsPrincipal));
-            }
-            catch
-            {
-                return await Task.FromResult(new AuthenticationState(_guest));
-            }
+            return await Task.FromResult(new AuthenticationState(claimsPrincipal));
         }
-
-        // Updates the authentication and set it in the Sessionstorage
-        public async Task UpdateAuthenticationState(UserSession? userSession)
+        catch
         {
-            ClaimsPrincipal claimsPrincipal;
-
-            if (userSession != null)
-            {
-                await _sessionstorage.SetAsync("UserSession", userSession);
-                claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> {
-                new Claim(ClaimTypes.Email , userSession.Email),
-                new Claim (ClaimTypes.Role, userSession.Role)
-                }));
-
-            }
-            else
-            {
-                await _sessionstorage.DeleteAsync("UserSession");
-                claimsPrincipal = _guest;
-            }
-            NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claimsPrincipal)));
+            return await Task.FromResult(new AuthenticationState(_guest));
         }
+    }
+
+    // Updates the authentication and set it in the Sessionstorage
+    public async Task UpdateAuthenticationState(UserSession? userSession)
+    {
+        ClaimsPrincipal claimsPrincipal;
+
+        if (userSession != null)
+        {
+            await sessionStorage.SetAsync("UserSession", userSession);
+            claimsPrincipal = new ClaimsPrincipal(new ClaimsIdentity(new List<Claim> {
+                new(ClaimTypes.Email , userSession.Email),
+                new(ClaimTypes.Role, userSession.Role)
+            }));
+
+        }
+        else
+        {
+            await sessionStorage.DeleteAsync("UserSession");
+            claimsPrincipal = _guest;
+        }
+        NotifyAuthenticationStateChanged(Task.FromResult(new AuthenticationState(claimsPrincipal)));
     }
 }

@@ -9,13 +9,14 @@ public partial class SearchableSelect<TItem> : ComponentBase
     [Parameter] public IEnumerable<TItem> Items { get; set; } = [];
     [Parameter] public EventCallback<TItem> OnSelected { get; set; }
     [Parameter] public Func<TItem, string> ItemToString { get; set; } = item => item?.ToString() ?? string.Empty;
-    [Parameter] public bool Disabled { get; set; } = false;
-    [Parameter] public TItem SelectedItem { get; set; }
+    [Parameter] public bool Disabled { get; set; }
+    [Parameter] public TItem? SelectedItem { get; set; }
 
     private string SearchText { get; set; } = string.Empty;
     private bool IsDropdownVisible { get; set; }
-    private string InputId { get; set; } = Guid.NewGuid().ToString();
+    private string InputId { get; } = Guid.NewGuid().ToString();
 
+    //Initialize component
     protected override void OnInitialized()
     {
         if (SelectedItem != null)
@@ -29,17 +30,17 @@ public partial class SearchableSelect<TItem> : ComponentBase
             ? Items
             : Items.Where(item => ItemToString(item).Contains(SearchText, StringComparison.OrdinalIgnoreCase));
 
-    private void ShowDropdown()
-    {
-        IsDropdownVisible = true;
-    }
+    //Show dropdown
+    private void ShowDropdown() => IsDropdownVisible = true;
 
+    //Hide dropdown with added delay
     private async Task HideDropdownWithDelay()
     {
         await Task.Delay(150);
         IsDropdownVisible = false;
     }
 
+    //Select item
     private async Task SelectItem(TItem item)
     {
         await OnSelected.InvokeAsync(item);

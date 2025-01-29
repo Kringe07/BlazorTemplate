@@ -2,56 +2,48 @@
 using ProjectName.DataAccess.DatabaseContext;
 using ProjectName.DataAccess.Entities;
 
-namespace ProjectName.DataAccess.Repository
+namespace ProjectName.DataAccess.Repository;
+
+public class UserRepository(IDbContextFactory<ProjectNameContext> context)
 {
-    public class UserRepository
+    // Get all Users
+    public async Task<List<T>> GetUsers<T>() where T : User
     {
-        private readonly IDbContextFactory<ProjectNameContext> _context;
+        await using var context1 = await context.CreateDbContextAsync();
+        return await context1.Users.OfType<T>().ToListAsync();
+    }
 
-        public UserRepository(IDbContextFactory<ProjectNameContext> context)
+    // Get 1 User with Id
+    public async Task<T> GetUser<T>(Guid id) where T : User
+    {
+        await using var context1 = await context.CreateDbContextAsync();
+        var user = await context1.Users.OfType<T>().FirstOrDefaultAsync(u => u.Id == id);
+        if (user == null)
+            throw new Exception("User not found!");
+
+        return user;
+    }
+
+    // Add new User
+    public async Task AddUser<T>(T user) where T : User
+    {
+        await using var context1 = await context.CreateDbContextAsync();
+        context1.Add(user);
+        await context1.SaveChangesAsync();
+    }
+
+    //Get 1 User with Email
+    public async Task<User?> GetUserDataAsync(string email)
+    {
+        try
         {
-            _context = context;
+            await using var context1 = await context.CreateDbContextAsync();
+            return await context1.Users.FirstOrDefaultAsync(x => x.Email == email);
         }
-        // Get all Users
-        public async Task<List<T>> GetUsers<T>() where T : User
+        catch (Exception e)
         {
-            await using var context = await _context.CreateDbContextAsync();
-            return await context.Users.OfType<T>().ToListAsync();
-        }
-
-        // Get 1 User with Id
-        public async Task<T> GetUser<T>(Guid id) where T : User
-        {
-            await using var context = await _context.CreateDbContextAsync();
-            var user = await context.Users.OfType<T>().FirstOrDefaultAsync(u => u.Id == id);
-            if (user == null)
-                throw new Exception("User not found!");
-
-            return user;
-        }
-
-        // Add new User
-        public async Task AddUser<T>(T user) where T : User
-        {
-            await using var context = await _context.CreateDbContextAsync();
-            context.Add(user);
-            await context.SaveChangesAsync();
-        }
-
-        //Get 1 User with Email
-        public async Task<User?> GetUserDataAsync(string Email)
-        {
-            try
-            {
-                await using ProjectNameContext context = await _context.CreateDbContextAsync();
-                var x = await context.Users.FirstOrDefaultAsync(x => x.Email == Email);
-                return x;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            Console.WriteLine(e);
+            throw;
         }
     }
 }
